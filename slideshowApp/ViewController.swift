@@ -11,22 +11,23 @@ import UIKit
 class ViewController: UIViewController
 {
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var forwardButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var playBotton: UIButton!
-   
-
+    
+    
     var imageNages = [
         "IMG_4048.jpg", "IMG_4202.jpg", "IMG_4854.jpg"
     ]
     var imageIndex: Int = 0
     var timer: Timer!
     var timer_sec: Float = 0
-  
     
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         
         imageView.image = UIImage(named: imageNages[imageIndex])
         
@@ -35,7 +36,7 @@ class ViewController: UIViewController
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-       
+        
     }
     
     func updateTimer(timer: Timer) {
@@ -46,11 +47,9 @@ class ViewController: UIViewController
         }
         else {
             imageIndex += 1                      //配列にあるviewを＋１ずつ入れ替える
-            // sldeshow実行時backbotton無効にする
-            backButton.isEnabled = false
             
         }
-          print("image: \(imageIndex)")
+        print("image: \(imageIndex)")
         
     }
     
@@ -65,7 +64,7 @@ class ViewController: UIViewController
         }
         imageView.image = UIImage(named: imageNages[imageIndex])
         print("forward: \(imageIndex)")
-    
+        
     }
     @IBAction func back(_ sender: Any) {
         
@@ -79,34 +78,38 @@ class ViewController: UIViewController
         imageView.image = UIImage(named: imageNages[imageIndex])
         print("back: \(imageIndex)")
     }
-
+    
     @IBAction func play(_ sender: Any) {
-       
+        
         if self.timer == nil {
-        self.timer = Timer.scheduledTimer(timeInterval: 2.0,
-              target: self,
-              selector: #selector(updateTimer),
-              userInfo: nil,
-              repeats: true)
+            self.timer = Timer.scheduledTimer(timeInterval: 2.0,
+                                              target: self,
+                                              selector: #selector(updateTimer),
+                                              userInfo: nil,
+                                              repeats: true)
             
             //ボタンのタイトル変更.
             playBotton.setTitle("停止", for: .normal)
+            forwardButton.isEnabled = false
+            backButton.isEnabled = false
             
         } else {
             //停止ボタンを有効にする
-             backButton.isEnabled = true
-             //ボタンのタイトルを変更
-             playBotton.setTitle("再生", for: .normal)
+            backButton.isEnabled = true
+            forwardButton.isEnabled = true
+            
+            //ボタンのタイトルを変更
+            playBotton.setTitle("再生", for: .normal)
             if self.timer != nil {
                 self.timer.invalidate()   // 現在のタイマーを破棄する
                 self.timer = nil          // startTimer() の timer == nil で判断するために、 timer = nil としておく
             }
+            
+            imageView.image = UIImage(named: imageNages[imageIndex])
+            print("play: \(imageIndex)")
+        }
         
-        imageView.image = UIImage(named: imageNages[imageIndex])
-        print("play: \(imageIndex)")
-     }
-    
-}
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //segueから遷移先のExpansionViewControllerを取得する
         let expansionViewController:ExpansionViewController = segue.destination as! ExpansionViewController
@@ -126,13 +129,13 @@ class ViewController: UIViewController
         
     }
     
-        
-    }
+    
+}
 
-    
-    
-    
 
- 
+
+
+
+
 
 
